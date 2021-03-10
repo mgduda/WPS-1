@@ -1,5 +1,19 @@
 #!/bin/sh
 
+if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+  echo ""
+  echo "configure [option]"
+  echo ""
+  echo "    where [option] is one of"
+  echo "    -h or --help : Print this help message and exit"
+  echo "    --no-wrf : Do not try to find a directory with compiled WRF code."
+  echo "               This implies that none of the WPS programs that rely on the WRF"
+  echo "               I/O libraries can be compiled."
+  echo ""
+
+  exit 0
+fi
+
 arg1=$1
 
 # Look for netcdf
@@ -180,6 +194,7 @@ else
    wrf_dir=$WRF_DIR
 fi
 
+if [ "$arg1" != "--no-wrf" ]; then
 if [ $wrf_dir = "none" ]; then
    echo ""
    echo "Error: No compiled WRF code found. Please check that the WRF model has been compiled"
@@ -187,6 +202,11 @@ if [ $wrf_dir = "none" ]; then
    echo "       or specify the full path to the compiled WRF model with the environment variable \$WRF_DIR ."
    echo ""
    exit
+fi
+else
+   echo ""
+   echo "--no-wrf was specified..."
+   echo ""
 fi
 
 # Found perl, so proceed with configuration
